@@ -1,0 +1,24 @@
+{
+    "python-envs.pythonProjects": [],
+    "tailwindCSS.lint.cssConflict": "ignore",
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 15,
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "trustServerCertificate": false
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "stamps.database.windows.net",
+            "port": 1433,
+            "askForPassword": true,
+            "driver": "MSSQL",
+            "name": "StampsDB",
+            "database": "Stamps",
+            "username": "rlinville"
+        }
+    ]
+}

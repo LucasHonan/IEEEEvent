@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mongo:latest
+    container_name: stamp_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - stamp_db_data:/data/db
+
+  api:
+    build: ./backend
+    container_name: stamp_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app             # NEW: Maps your code so it updates live
+      - D:/Stamps:/app/images
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URL=mongodb://db:27017
+
+  web:
+    build: ./frontend
+    container_name: stamp_web
+    ports:
+      - "5173:5173"                # UPDATED: Matches Vite default
+    volumes:
+      - ./frontend:/app            # NEW: Maps frontend code for live updates
+      - /app/node_modules          # Prevents container errors
+    depends_on:
+      - api
+
+volumes:
+  stamp_db_data:

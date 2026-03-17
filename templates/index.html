@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Stamps</h2>
+<ul>
+{% for stamp in stamps %}
+    <li>{{ stamp.name }} - {{ stamp.country }} ({{ stamp.year }})</li>
+{% endfor %}
+</ul>
+{% endblock %}
