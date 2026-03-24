@@ -112,6 +112,56 @@ Target architecture:
 
 ---
 
+---
+
+## Feature: Tag editing on the Edit Stamp page
+
+**Problem:** The Edit Stamp page currently has no way to view or edit a stamp's tags. Tags exist in the data model but are invisible in the UI.
+
+**Plan:**
+- Add a tag editor to the Edit Stamp page that displays existing tags as removable chips.
+- Allow the user to type a new tag and press Enter or a button to add it.
+- Tags are stored as a string array in MongoDB — `handleChange` does not handle arrays, so a dedicated `handleTagAdd` / `handleTagRemove` function will be needed.
+- The tags are already included in the `formData` sent to the PUT endpoint, so no backend changes are required.
+
+**Done when:** Tags are visible on the Edit page, new tags can be added, existing tags can be removed, and changes are saved correctly.
+
+---
+
+---
+
+## Feature: Tests
+
+**Problem:** There are currently no automated tests. As the app grows and moves toward cloud hosting, untested changes become riskier.
+
+**Plan:**
+
+### Backend (Python/FastAPI)
+- Use `pytest` and `httpx` (async test client) to test the API endpoints.
+- Key tests:
+  - `GET /stamps` returns a list, respects `country` filter and pagination
+  - `GET /stamps/{country}/{scott_number}` returns the correct stamp
+  - `PUT /stamps/{country}/{scott_number}` updates and returns the updated stamp
+  - `GET /countries` returns a unique list of countries
+  - Sort order is correct (by `print_year` then numeric `scott_number`)
+- Use a separate test MongoDB database so tests don't touch real data.
+
+### Frontend (React/TypeScript)
+- Use `Vitest` (built into Vite) and `React Testing Library`.
+- Key tests:
+  - `CollectionView` renders stamp grid and country filter buttons
+  - Selecting a country updates the URL param
+  - `EditStampPage` loads stamp data and populates form fields correctly
+  - Condition dropdown shows the saved value
+  - Tags can be added and removed
+
+### CI (Azure DevOps)
+- Add a pipeline step that runs backend and frontend tests on every PR before merging to `master`.
+
+**Done when:** `pytest` and `vitest` both pass in CI on every PR.
+
+---
+
 ## Recommended order of work
 
 1. Issue 1 — migrate images to R2 (unblocks everything else)

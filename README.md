@@ -50,6 +50,41 @@ Stamp images are stored in **Cloudflare R2** (S3-compatible object storage).
 
 When you upload an image on the Edit Stamp page, the backend sends the file to R2 and returns a public URL. That URL is stored in the stamp's `image_url` field in MongoDB and used to display the image in the collection.
 
+## Running Tests
+
+### Frontend
+
+Tests use [Vitest](https://vitest.dev/) and React Testing Library. Run them outside of Docker, directly on your machine.
+
+```bash
+cd frontend
+npm test          # run all tests once
+npm run test:watch  # re-run on file changes
+```
+
+Test files live in `frontend/src/test/`.
+
+To run a single test file:
+
+```bash
+npm test src/test/EditStampPage.test.tsx
+```
+
+To run a single test by name (partial match):
+
+```bash
+npm test -- --reporter=verbose -t "adds a new tag"
+```
+
+### Backend
+
+Tests use `pytest` with `httpx` as the async test client. *(Coming soon — see plan.md)*
+
+```bash
+cd backend
+pytest
+```
+
 ## Data Model
 
 See AppSetup.md for the MongoDB schema.

@@ -11,6 +11,7 @@ const EditStampPage = () => {
   const [formData, setFormData] = useState<any>(null);
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isUploading, setIsUploading] = useState(false);
+  const [tagInput, setTagInput] = useState('');
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -50,6 +51,17 @@ const EditStampPage = () => {
       ...formData,
       [name]: name === 'value' ? value : type === 'number' ? parseFloat(value) : value
     });
+  };
+
+  const handleTagAdd = () => {
+    const tag = tagInput.trim();
+    if (!tag || (formData.tags ?? []).includes(tag)) return;
+    setFormData({ ...formData, tags: [...(formData.tags ?? []), tag] });
+    setTagInput('');
+  };
+
+  const handleTagRemove = (tag: string) => {
+    setFormData({ ...formData, tags: (formData.tags ?? []).filter((t: string) => t !== tag) });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,6 +174,32 @@ const EditStampPage = () => {
                 />
               </div>
             )}
+          </div>
+        </section>
+
+        {/* Section 5: Tags */}
+        <section className="border-t pt-6">
+          <label className="block text-sm font-bold text-gray-700 mb-2">Tags</label>
+          <div className="flex gap-2 mb-3">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={e => setTagInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleTagAdd(); } }}
+              placeholder="Add a tag..."
+              className="border p-2 rounded w-full"
+            />
+            <button type="button" onClick={handleTagAdd} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Add
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {(formData.tags ?? []).map((tag: string) => (
+              <span key={tag} className="flex items-center gap-1 bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                {tag}
+                <button type="button" onClick={() => handleTagRemove(tag)} className="text-blue-500 hover:text-red-600 font-bold ml-1">×</button>
+              </span>
+            ))}
           </div>
         </section>
 
