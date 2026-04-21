@@ -91,7 +91,7 @@ const AddStampPage = () => {
       
       {status.message && (
         <div className={`p-4 mb-6 rounded-lg font-medium ${
-          status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
+          status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : status.type === 'loading' ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-red-50 text-red-700 border border-red-200'
         }`}>
           {status.message}
         </div>

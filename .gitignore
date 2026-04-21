@@ -13,3 +13,6 @@ dist/
 
 # Docker
 *.log
+
+# MongoDB migration artifacts
+mongo-dump/

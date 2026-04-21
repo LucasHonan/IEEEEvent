@@ -22,8 +22,6 @@ services:
       - db
     env_file:
       - .env
-    environment:
-      - MONGODB_URL=mongodb://db:27017
 
   web:
     build: ./frontend

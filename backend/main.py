@@ -32,7 +32,7 @@ app.add_middleware(
 )
 
 # MongoDB connection
-client = AsyncIOMotorClient("mongodb://db:27017")
+client = AsyncIOMotorClient(os.getenv("MONGODB_URL", "mongodb://db:27017"))
 db = client.stamp_archive
 collection = db.stamps
 
