@@ -49,7 +49,7 @@ const EditStampPage = () => {
     const { name, value, type } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'value' ? value : type === 'number' ? parseFloat(value) : value
+      [name]: name === 'value' ? value : name === 'quantity' ? parseInt(value, 10) : type === 'number' ? parseFloat(value) : value
     });
   };
 
@@ -148,6 +148,10 @@ const EditStampPage = () => {
               <span className="text-gray-500">$</span>
               <input type="text" name="value" value={formData.value ?? ''} onChange={handleChange} className="border p-2 rounded w-full" />
             </div>
+          </div>
+          <div className="space-y-4">
+            <h3 className="font-bold text-blue-800">Quantity</h3>
+            <input type="number" name="quantity" min="1" value={formData.quantity ?? 1} onChange={handleChange} className="border p-2 rounded w-full" />
           </div>
         </section>
 

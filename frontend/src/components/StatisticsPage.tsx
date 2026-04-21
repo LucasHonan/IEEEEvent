@@ -13,6 +13,7 @@ interface StatisticsData {
   grand_total_value: number;
   total_countries: number;
   total_stamps: number;
+  total_unique_stamps: number;
 }
 
 const StatisticsPage = () => {
@@ -50,6 +51,7 @@ const StatisticsPage = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <p className="text-gray-600 text-sm font-medium mb-2">Total Stamps</p>
           <p className="text-4xl font-bold text-green-600">{stats.total_stamps}</p>
+          <p className="text-gray-400 text-xs mt-1">{stats.total_unique_stamps} unique</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 md:col-span-2">

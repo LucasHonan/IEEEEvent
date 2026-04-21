@@ -48,6 +48,7 @@ class Stamp(BaseModel):
     perforations: Optional[str] = None    # e.g., "11 x 10.5"
     condition: str
     value: float
+    quantity: int = 1
     image_url: str
     tags: List[str] = []
 
@@ -108,8 +109,8 @@ async def get_statistics():
         {
             "$group": {
                 "_id": "$country",
-                "count": {"$sum": 1},
-                "total_value": {"$sum": "$value"}
+                "count": {"$sum": {"$ifNull": ["$quantity", 1]}},
+                "total_value": {"$sum": {"$multiply": ["$value", {"$ifNull": ["$quantity", 1]}]}}
             }
         },
         {
@@ -134,7 +135,8 @@ async def get_statistics():
         ],
         "grand_total_value": grand_total,
         "total_countries": len(results),
-        "total_stamps": sum(item["count"] for item in results)
+        "total_stamps": sum(item["count"] for item in results),
+        "total_unique_stamps": await collection.count_documents({})
     }
     
     return stats

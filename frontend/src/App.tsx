@@ -18,6 +18,7 @@ interface Stamp {
   dimensions: string;
   condition: string;
   value: number;
+  quantity: number;
   image_url: string;
   tags: string[];
 }
@@ -92,7 +93,7 @@ const CollectionView = () => {
                 alt={stamp.name}
                 className="w-full h-32 object-contain bg-gray-50 mb-2"
               />
-              <h3 className="font-bold text-sm truncate">{stamp.name}</h3>
+              <h3 className="font-bold text-sm truncate">{stamp.name}{(stamp.quantity ?? 1) > 1 && <span className="text-gray-400 font-normal"> ({stamp.quantity})</span>}</h3>
               <p className="text-xs text-gray-600">{stamp.scott_number} • {stamp.country}</p>
             </div>
           </div>

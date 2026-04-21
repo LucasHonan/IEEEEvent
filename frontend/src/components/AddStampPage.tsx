@@ -58,6 +58,7 @@ const AddStampPage = () => {
       dimensions: formData.get('dimensions'),
       condition: formData.get('condition'),
       value: parseFloat(formData.get('value') as string) || 0,
+      quantity: parseInt(formData.get('quantity') as string) || 1,
       image_url: uploadedImageUrl, // Use the R2 URL from the upload step
       tags: (formData.get('tags') as string).split(',').map(tag => tag.trim()).filter(t => t !== ""),
     };
@@ -156,9 +157,13 @@ const AddStampPage = () => {
             <input name="dimensions" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border" placeholder="20 x 24" />
           </div>
 
-          <div className="col-span-2">
+          <div>
             <label className="block text-sm font-semibold text-gray-700">Market Value ($)</label>
             <input name="value" type="number" step="0.01" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border" placeholder="0.00" />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Quantity</label>
+            <input name="quantity" type="number" min="1" defaultValue={1} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border" />
           </div>
         </div>
 
