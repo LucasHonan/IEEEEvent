@@ -81,7 +81,8 @@ async def startup_event():
 async def get_stamps(limit: int = 50, skip: int = 0, country: Optional[str] = None):
     query = {}
     if country:
-        query["country"] = country
+        countries = [c.strip() for c in country.split(',') if c.strip()]
+        query["country"] = {"$in": countries} if len(countries) > 1 else countries[0]
     pipeline = [
         {"$match": query},
         {"$addFields": {"scott_number_int": {"$let": {
@@ -95,11 +96,30 @@ async def get_stamps(limit: int = 50, skip: int = 0, country: Optional[str] = No
     stamps = await collection.aggregate(pipeline).to_list(length=limit)
     return stamps
 
+@app.get("/stamps/count")
+async def get_stamp_count(country: Optional[str] = None):
+    query = {}
+    if country:
+        countries = [c.strip() for c in country.split(',') if c.strip()]
+        query["country"] = {"$in": countries} if len(countries) > 1 else countries[0]
+    count = await collection.count_documents(query)
+    return {"count": count}
+
 @app.get("/countries")
 async def get_countries():
     """Returns a list of all unique countries in the collection"""
     countries = await collection.distinct("country")
     return sorted(countries)
+
+@app.get("/countries/counts")
+async def get_country_counts():
+    """Returns countries with stamp counts, sorted alphabetically"""
+    pipeline = [
+        {"$group": {"_id": "$country", "count": {"$sum": {"$ifNull": ["$quantity", 1]}}}},
+        {"$sort": {"_id": 1}}
+    ]
+    results = await collection.aggregate(pipeline).to_list(None)
+    return [{"country": r["_id"], "count": r["count"]} for r in results]
 
 @app.get("/statistics")
 async def get_statistics():
